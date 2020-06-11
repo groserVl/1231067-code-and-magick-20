@@ -2,7 +2,7 @@
 
 // Делает блок мага видимым
 var setupWizard = document.querySelector('.setup');
-setupWizard.classList.remove('hidden');
+// setupWizard.classList.remove('hidden');
 // Делает блок похожих магов видимым
 var similarWizard = document.querySelector('.setup-similar');
 similarWizard.classList.remove('hidden');
@@ -55,32 +55,40 @@ var eyesColorWizards = [
   'green'
 ];
 
+var fireballColors = [
+  '#ee4830',
+  '#30a8ee',
+  '#5ce6c0',
+  '#e848d5',
+  '#e6e848'
+];
+
 // Функция герации случайных данных
-var calculateRandom = function (propertiesWizards) {
+var getRandomProperty = function (propertiesWizards) {
   return propertiesWizards[Math.floor(Math.random() * propertiesWizards.length)];
 };
 
 // // Описание магов
 var wizards = [
   {
-    name: calculateRandom(nameWizards) + ' ' + calculateRandom(surnameWizards),
-    coatColor: calculateRandom(coatColorWizards),
-    eyesColor: calculateRandom(eyesColorWizards)
+    name: getRandomProperty(nameWizards) + ' ' + getRandomProperty(surnameWizards),
+    coatColor: getRandomProperty(coatColorWizards),
+    eyesColor: getRandomProperty(eyesColorWizards)
   },
   {
-    name: calculateRandom(nameWizards) + ' ' + calculateRandom(surnameWizards),
-    coatColor: calculateRandom(coatColorWizards),
-    eyesColor: calculateRandom(eyesColorWizards)
+    name: getRandomProperty(nameWizards) + ' ' + getRandomProperty(surnameWizards),
+    coatColor: getRandomProperty(coatColorWizards),
+    eyesColor: getRandomProperty(eyesColorWizards)
   },
   {
-    name: calculateRandom(nameWizards) + ' ' + calculateRandom(surnameWizards),
-    coatColor: calculateRandom(coatColorWizards),
-    eyesColor: calculateRandom(eyesColorWizards)
+    name: getRandomProperty(nameWizards) + ' ' + getRandomProperty(surnameWizards),
+    coatColor: getRandomProperty(coatColorWizards),
+    eyesColor: getRandomProperty(eyesColorWizards)
   },
   {
-    name: calculateRandom(nameWizards) + ' ' + calculateRandom(surnameWizards),
-    coatColor: calculateRandom(coatColorWizards),
-    eyesColor: calculateRandom(eyesColorWizards)
+    name: getRandomProperty(nameWizards) + ' ' + getRandomProperty(surnameWizards),
+    coatColor: getRandomProperty(coatColorWizards),
+    eyesColor: getRandomProperty(eyesColorWizards)
   }
 ];
 
@@ -105,3 +113,77 @@ var getSimilarWizzars = function () {
 };
 
 getSimilarWizzars();
+// ------------------------------------------------------------
+
+var setupOpen = document.querySelector('.setup-open');
+var setupClose = setupWizard.querySelector('.setup-close');
+var wizardCoat = document.querySelector('.wizard-coat');
+var wizardEyes = document.querySelector('.wizard-eyes');
+var fireballWrap = document.querySelector('.setup-fireball-wrap');
+var ipputCoatColor = document.querySelector('input[name=coat-color]');
+var inputNameEyes = document.querySelector('input[name=eyes-color]');
+var inputFireballColor = document.querySelector('input[name=fireball-color]');
+
+// Инструкции (что происходит при нажатии кнопок)
+var onPopupEscPress = function (evt) {
+  if (evt.key === 'Escape') {
+    evt.preventDefault();
+    closePopup();
+  }
+};
+
+var onWizardCoatClick = function () {
+  wizardCoat.style.fill = getRandomProperty(coatColorWizards);
+  ipputCoatColor.value = getRandomProperty(coatColorWizards);
+};
+
+var onWizardEyesClick = function () {
+  wizardEyes.style.fill = getRandomProperty(eyesColorWizards);
+  inputNameEyes.value = getRandomProperty(eyesColorWizards);
+};
+
+var setupFireballClick = function () {
+  fireballWrap.setAttribute('style', 'background-color: ' + getRandomProperty(fireballColors));
+  inputFireballColor.value = getRandomProperty(fireballColors);
+};
+
+// Фу-ия подключения обработчиков и скрытия класса
+var openPopup = function () {
+  setupWizard.classList.remove('hidden');
+  wizardCoat.addEventListener('click', onWizardCoatClick);
+  wizardEyes.addEventListener('click', onWizardEyesClick);
+  fireballWrap.addEventListener('click', setupFireballClick);
+  document.addEventListener('keydown', onPopupEscPress);
+
+};
+
+//  Фу-ия отключения обработчиков и прибавление класса
+var closePopup = function () {
+  setupWizard.classList.add('hidden');
+  wizardCoat.removeEventListener('click', onWizardCoatClick);
+  wizardEyes.removeEventListener('click', onWizardEyesClick);
+  fireballWrap.removeEventListener('click', setupFireballClick);
+  document.removeEventListener('keydown', onPopupEscPress);
+};
+
+// Открытие/закрытие окна настройки персонажа
+setupOpen.addEventListener('click', function () {
+  openPopup();
+});
+
+setupOpen.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Enter') {
+    openPopup();
+  }
+});
+
+setupClose.addEventListener('click', function () {
+  closePopup();
+});
+
+setupClose.addEventListener('keydown', function (evt) {
+  if (evt.key === 'Enter') {
+    closePopup();
+  }
+});
+
